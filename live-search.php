@@ -1,7 +1,8 @@
 <?php 
+$serach = $_POST['search'];
 $con = mysqli_connect("localhost","root","","ajax") or die("Connection Failed");
 
-$sql = "SELECT * from student";
+$sql = "SELECT * from student Where firstname Like '%{$serach}%' Or lastname like '%{$serach}%'";
 $result = mysqli_query($con,$sql) or die("Sql Query Failed");
 
 $output = "";

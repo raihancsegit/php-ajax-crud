@@ -41,10 +41,12 @@
   </table>
   <div id="error-message"></div>
   <div id="success-message"></div>
+
   <div id="modal">
     <div id="modal-form">
       <h2>Edit Form</h2>
       <table cellpadding="10px" width="100%">
+        
       </table>
       <div id="close-btn">X</div>
     </div>
@@ -117,6 +119,56 @@ $(document).ready(function(){
      }
    })
 
+   //Show Modal Box
+   $(document).on("click",".edit-btn", function(){
+      $("#modal").show(); 
+      var editId = $(this).data("eid");
+
+      $.ajax({
+          url:'update-load-data.php',
+          type:"POST",
+          data:{id:editId},
+          success:function(data){
+              $("#modal-form table").html(data)
+          }
+        })
+   })
+   $("#close-btn").on("click",function(){
+      $("#modal").hide();
+   })
+
+   $(document).on("click","#edit-submit", function(){
+      var sid   = $("#edit-id").val();
+      var fname =  $("#edit-fname").val();
+      var lname = $("#edit-lname").val();
+      $.ajax({
+          url:'edit-update-data.php',
+          type:"POST",
+          data:{id:sid,fname:fname,lname:lname},
+          success:function(data){
+            if(data == 1){
+              $("#modal").hide();
+              load_data();
+            }else {
+              $("#error-message").html("Can't Update record").slideDown();
+                $("#success-message").slideUp();
+            }
+            
+          }
+        })
+   })
+
+   $("#search").on("keyup",function(){
+     var serach = $(this).val();
+     $.ajax({
+          url:'live-search.php',
+          type:"POST",
+          data:{search:serach},
+          success:function(data){
+            $("#table-data").html(data)
+          }
+        })
+   });
 });
 </script>
 </body>
